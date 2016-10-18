@@ -15,7 +15,7 @@
 (def personal-space 10)
 
 ;;"Max angle from boid's movement direction that another boid can be to still influence movement"
-(def infl-angle 90)
+(def infl-angle (/ Math/PI 2))
 
 ;;"Max movement speed for a boid, in pixels/frame"
 (def boid-speed 10)
@@ -27,13 +27,13 @@
 (def boid-diam 10)
 
 ;; boid stroke weight
-(def boid-stroke-weight 0)
+(def boid-stroke-weight 1)
 
 ;;"Intial heading angle"
-(def heading-angle 180)
+(def heading-angle 0)
 
 ;;"Max deviation from heading angle"
-(def heading-angle-dev 30)
+(def heading-angle-dev (/ Math/PI 2))
 
 ;;"Boid fill color"
 (def boid-fill-color [100 100 200])

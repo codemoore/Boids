@@ -10,9 +10,8 @@
          y (:y globals/screen-size)
          b (/ globals/boid-diam 2)]
       (assoc (util/generate-rand-position (+ 0 b) (- x b) (+ 0 b) (- y b))   ;; starting x, y pos
-         :heading (:heading boid)
-         :vel-x 0
-         :vel-y 0)))
+      :vel-x (:vel-x boid)
+      :vel-y (:vel-x boid))))
 
 (defn create-boid
 
@@ -27,10 +26,11 @@
     "create a boid in a random position"
     (let [x (:width globals/screen-size)
           y (:height globals/screen-size)
-          heading-angle (util/generate-heading-angle)]
+          heading-angle (util/generate-heading-angle)
+          velocity (utils/get-velocity heading-angle)]
        (assoc (util/generate-rand-position 0 x 0 y)   ;; starting x, y pos
           :heading heading-angle        ;; global angle the boid is facing
-          :vel-x 0    ;; starting velocities set to 0, velocity will be calculated on first update
+          :vel-x ()    ;; starting velocities set to 0, velocity will be calculated on first update
           :vel-y 0)))
 
    ([boids]

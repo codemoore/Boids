@@ -13,14 +13,16 @@
    (Math/sqrt (+ (Math/pow (- x2 x1) 2) (Math/pow (- y2 y1) 2)))))
 
 (defn too-close?
-   "
-      is [boid] within [dist] distance from another boid in [boids]?
-
-   "
    [boids boid dist]
+   "
+   is [boid] within [dist] distance from another boid in [boids]?
+   "
    (some #(< (distance boid %) dist) boids))
 
-
+(defn in-range?
+   [boid1 boid2]
+   "Is boid2 in range of boid1?"
+   (<= (distance boid1 boid2) globals/infl-distance))
 
 (defn rand-bounded
    [min max]
@@ -36,8 +38,6 @@
    {:x (rand-bounded x-min x-max)
     :y (rand-bounded y-min y-max)})
 
-
-
 (defn generate-heading-angle
    []
    "
@@ -46,3 +46,32 @@
    (let [min (- globals/heading-angle globals/heading-angle-dev)
          max (+ globals/heading-angle globals/heading-angle-dev)]
       (rand-bounded min max)))
+
+(defn get-vx
+   [theta]
+   "
+      use angle theta in radians to calulate the unit vx
+   "
+   (let [vx (/ (Math/tan theta) (Math/sqrt (+ (Math/pow (Math/tan theta) 2) 1)))]
+      (if (> theta 180) ;; if the angle is greater than 180 x will be negative
+         (* -1 vx)
+         vx)))
+
+(defn get-vy
+   [vx theta]
+   "
+      get vy in terms of vx, use theta in radians for polarity
+   "
+   (let [vy (Math/sqrt (- 1 (Math/pow vx 2)))]
+      (if (or (< theta 90) (> theta 270)) ;; theta 0-90 or 270 - 360 means
+         (* -1 vy)
+         vy)))
+
+(defn get-unit-vector
+   [heading-angle]
+   "
+      calculate and return unit-vector-velocity (vx + vy = 1) based on [heading-angle]
+      straight up (vx=0 vy=-1) is 0 deg, right (vx=1, vy=0) is 90 deg, etc
+   "
+   (let [x (get-vx heading-angle)
+         y (get vy x)]))

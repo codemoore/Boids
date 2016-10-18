@@ -2,6 +2,14 @@
 
 A Quil sketch designed to ... well, that part is up to you.
 
+## TODO
+    - Give boids a intial velocity
+    - Rework heading
+        - remove initial random heading, calculate base on velocity
+        - Decide whether to store heading in state (probably not)
+    - Finish steering logic (maybe put in new namespace)
+    -Change heading angle to radians
+
 ## Usage
 
 LightTable - open `core.clj` and press `Ctrl+Shift+Enter` to evaluate the file.
