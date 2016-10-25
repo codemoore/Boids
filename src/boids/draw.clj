@@ -7,24 +7,22 @@
    [boid diameter]
    "draw a single boid"
    (apply q/fill globals/boid-fill-color)
-   (apply q/stroke globals/boid-stroke-color)
+   (apply q/stroke globals/vel-stroke-color)
    (q/stroke-weight globals/boid-stroke-weight)
    (let [x (/ (:width globals/screen-size) 2)
          y (/ (:height globals/screen-size) 2)
          bx (:x (:pos boid))
          by (:y (:pos boid))
          r (/ diameter 2)
-         #_(a (* radius (/ (Math/sqrt 2) 2))) ]
+         ;angle (util/calc-angle (:vel boid))
+         ]
       (q/push-matrix) ;; save previous state
       (q/translate bx by) ;; move origin to boid position
       (q/line 0 0 (* (:x (:vel boid)) diameter) (* (:y (:vel boid)) diameter))
-      (q/stroke 0)
-      (q/rotate  (util/calc-angle (:vel boid)) ) ;; rotate to direction of movement
-      ;(q/triangle    0     (* r -2)
-      ;            (* r -1) (* r 2)
-      ;               r     (* r 2))
-      (q/line (- 0 r) (+ 0 r)
-              (+ 0 r) (- 0 r))
+      (apply q/stroke globals/boid-stroke-color)
+      ;(println (str (:vel boid) " angle: " angle))
+      ;(q/rotate   (+ angle (/ Math/PI 2))) ;; rotate to direction of movement
+      (q/ellipse 0 0 diameter diameter)
       (q/pop-matrix))) ;; return to previous state
 
 (defn draw-boids

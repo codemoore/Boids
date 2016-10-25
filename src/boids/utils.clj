@@ -17,7 +17,7 @@
 (defn too-close-fn [boid dist]
    "2 single boids too close? fn"
    #(let [d (distance (:pos boid) (:pos %))]
-      (and d (< d dist) (not (identical? boid %)))))
+      (and (<= d dist) (not (identical? boid %)))))
 
 (defn too-close?
    [boid1 boid2]
@@ -98,10 +98,18 @@
 (defn calc-angle [velocity]
    "Calculate heading angle in radians from velocity"
    (if (and velocity (:x velocity) (:y velocity))
-      (let [ theta (Math/atan (/ (:x velocity) (* -1 (:y velocity))))]
-         (if (neg? (:x velocity))
-            (+ theta (/ Math/PI 2))
-            theta))
+      (let [x (:x velocity)
+            y (:y velocity)
+            angle (cond
+                     (and (neg? y) (pos? x))
+                        (Math/atan (/ (* -1 y) x))
+                     (and (neg? y) (neg? x))
+                        (+ (/ Math/PI 2) (Math/atan (/ x (* -1 y))) )
+                     (and (pos? y) (pos? x))
+                        (- (* 2 Math/PI) (Math/atan (/ y x)))
+                     (and (pos? y) (neg? x))
+                        (- (* 2 Math/PI) (+ (/ Math/PI 2) (Math/atan (/ (* -1 x) y)))))]
+         (* -1 angle))
       nil))
 
 (defn normalize-velocity [vel]

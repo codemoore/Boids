@@ -56,7 +56,7 @@
 
 
 (defn reduce-sep-fn [sym boid]
-   #(- %1 (- (sym (:pos %2)) (sym (:pos boid)))))
+   #(- %1 (/ (- (sym (:pos %2)) (sym (:pos boid))) (util/distance (:pos boid) (:pos %2)))))
 
 (defn seperation
    [boid boids]
@@ -74,6 +74,9 @@
                     {:x 0 :y 0})
          sep (util/normalize-velocity sep-vel)]
       (apply-weight sep globals/sep-weight)))
+
+(defn self-vel [boid boids]
+   (apply-weight (:vel boid) globals/self-weight))
 
 
 (defn apply-rules [boid boids & rules]
@@ -99,7 +102,7 @@
    "return unit-velocity"
    (let [boids-in-range (get-boids-in-range boid boids)]
       (if (> (count boids-in-range) 0)
-         (let [velocities (conj (apply-rules boid boids-in-range alignment cohesion seperation)
+         (let [velocities (conj (apply-rules boid boids-in-range alignment cohesion seperation self-vel)
                                 (:vel boid))
                combined (reduce combine velocities)]
             ;; combine velocities and limit
