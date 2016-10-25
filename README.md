@@ -1,14 +1,11 @@
 # boids
 
-A Quil sketch designed to ... well, that part is up to you.
+A Quil sketch for a boids flocking algorithm.
+
+Some issues with boid seperation, most likely fixed by todo items.
 
 ## TODO
-    - Give boids a intial velocity
-    - Rework heading
-        - remove initial random heading, calculate base on velocity
-        - Decide whether to store heading in state (probably not)
-    - Finish steering logic (maybe put in new namespace)
-    -Change heading angle to radians
+    -Switch to use acceleration and variable speeds
 
 ## Usage
 
