@@ -4,34 +4,33 @@
              [quil.core :as q]))
 
 (defn regen-boid-pos
-   "regenerate starting position"
-   [boid]
-   (let [x (:x globals/screen-size)
-         y (:y globals/screen-size)
+      "regenerate starting position"
+      [boid]
+      (let [w (:width globals/screen-size)
+         h (:height globals/screen-size)
          b (/ globals/boid-diam 2)]
-      (assoc (util/generate-rand-position (+ 0 b) (- x b) (+ 0 b) (- y b))   ;; starting x, y pos
-      :vel-x (:vel-x boid)
-      :vel-y (:vel-x boid))))
+           {:pos #_{:x (/ w 2) :y (/ h 2)} (util/generate-rand-position b (- w b) b (- h b))  ;; starting x, y pos
+            :vel (:vel boid)
+            :heading (:heading boid)}))
 
 (defn create-boid
 
    ([boid boids]
     "create a boid in a random location that is not inside another boid"
-    (if (util/too-close? boids boid globals/personal-space)
+    (if (util/too-close-boids? boids boid globals/personal-space)
        (create-boid (regen-boid-pos boid) boids)
        ;; else
        boid))
 
    ([]
     "create a boid in a random position"
-    (let [x (:width globals/screen-size)
-          y (:height globals/screen-size)
+    (let [b (/ globals/boid-diam 2)
+          x (- (:width globals/screen-size) b)
+          y (- (:height globals/screen-size) b)
           heading-angle (util/generate-heading-angle)
-          velocity (utils/get-velocity heading-angle)]
-       (assoc (util/generate-rand-position 0 x 0 y)   ;; starting x, y pos
-          :heading heading-angle        ;; global angle the boid is facing
-          :vel-x ()    ;; starting velocities set to 0, velocity will be calculated on first update
-          :vel-y 0)))
+          velocity (util/get-unit-vector heading-angle)]
+       {:pos (util/generate-rand-position b x b y)   ;; starting x, y pos
+        :vel velocity}))
 
    ([boids]
    "create a boid in a random location that is not inside another boid"
@@ -54,7 +53,7 @@
 (defn setup
    []
    "Set initial quil params and return intial state"
-   (q/frame-rate 5)
+   (q/frame-rate globals/frame-rate)
    {:boids (generate-boids)
     :boid-diam globals/boid-diam
     :boid-speed globals/boid-speed

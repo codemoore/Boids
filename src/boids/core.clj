@@ -8,7 +8,7 @@
 
 (q/defsketch boids
   :title globals/title
-  :size [600 600]
+  :size [(:width globals/screen-size) (:height globals/screen-size)]
   ; setup function called only once, during sketch initialization.
   :setup setup/setup
   ; update-state is called on each iteration before draw-state.

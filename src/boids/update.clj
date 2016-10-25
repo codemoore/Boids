@@ -4,28 +4,39 @@
              [boids.steer :as steer]))
 
 
+(defn move
+   ([pos vel speed]
+    "
+      move based of vel * speed,
+      overflow to start
+    "
+    {:x (mod (+ (:x pos) (* (:x vel) speed)) (:width globals/screen-size))
+     :y (mod (+ (:y pos) (* (:y vel) speed)) (:height globals/screen-size))}))
+
 (defn update-boid
-   [boid boids]
+   [boid boids speed]
    "
       Update boid position based on velocity
       Update velocity and heading angle based on other boids within influence distance
    "
-   (let [new-velocity (steer/steer-boid boid boids)]
-      {:x (move-x boid) ;; return
-       :y (move-y boid)
-       :vel-x (:vel-x new-velocity)
-       :vel-y (:vel-y new-velocity)
-       }))
+   (let [steering (steer/steer-boid boid boids)
+         new-velocity (:vel steering)]
+        {:pos (move (:pos boid) new-velocity speed)
+         :vel new-velocity
+         :heading (:heading steering)}))
 
 (defn update-boids
    [state]
    "loop through and update all boids"
    (loop [old-boids (:boids state)
           new-boids []]
-      (if (not-empty old-boids)
-         (do (conj new-boids (update-boid (first old-boids) (:boids state)))
-            (recur (rest old-boids) new-boids))
-         new-boids)))
+      (if (empty? old-boids)
+         (do new-boids)
+         (do (let [new-boids (conj new-boids
+                                   (update-boid (first old-boids)
+                                    (:boids state)
+                                    (:boid-speed state)))]
+                  (recur (rest old-boids) new-boids))))))
 
 
 
