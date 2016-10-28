@@ -25,6 +25,7 @@
       (q/ellipse 0 0 diameter diameter)
       (q/pop-matrix))) ;; return to previous state
 
+
 (defn draw-boids
    [state]
    "loop through boids and draw them"

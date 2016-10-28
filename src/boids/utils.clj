@@ -111,15 +111,30 @@
                         (- (* 2 Math/PI) (+ (/ Math/PI 2) (Math/atan (/ (* -1 x) y)))))]
          (* -1 angle))
       nil))
+(defn magnitude [vel]
+   "pop pop"
+   (Math/sqrt (+ (Math/pow (:x vel) 2) (Math/pow (:y vel) 2))))
 
 (defn normalize-velocity [vel]
    "velocity should be limited to a unit vector where abs(x) + abs(y) <= 1
    normalizes vector"
-   (let [x-old (:x vel)
-         y-old (:y vel)
-         magnitude (Math/sqrt (+ (Math/pow x-old 2) (Math/pow y-old 2)))]
+   (let [magnitude (magnitude vel)]
       (if (> magnitude 0)
-         {:x (/ x-old magnitude)
-          :y (/ y-old magnitude)}
+         {:x (/ (:x vel) magnitude)
+          :y (/ (:y vel) magnitude)}
+         vel)))
+
+(defn limit-velocity [vel]
+   "
+      if velocity magnitude is greate than max speed,
+         then return a limited velocity
+      else return the velocity unchanged
+   "
+   (let [magnitude (magnitude vel)
+         max (globals/boid-speed)]
+      (if (> magnitude max)
+         (let [r (/ max magnitude)]
+            {:x (* (:x vel) r)
+             :y (* (:y vel) r)})
          vel)))
 
