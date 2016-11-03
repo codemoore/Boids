@@ -4,7 +4,8 @@
             [boids.setup :as setup]
             [boids.globals :as globals]
             [boids.update :as update]
-            [boids.draw :as draw]))
+            [boids.draw :as draw]
+            [boids.events :as events]))
 
 (q/defsketch boids
   :title globals/title
@@ -14,7 +15,8 @@
   ; update-state is called on each iteration before draw-state.
   :update update/update-state
   :draw draw/draw-state
-  :features [:keep-on-top]
+  :mouse-clicked events/mouse-clicked
+  :features [:keep-on-top :exit-on-close]
   ; This sketch uses functional-mode middleware.
   ; Check quil wiki for more info about middlewares and particularly
   ; fun-mode.

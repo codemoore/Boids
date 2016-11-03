@@ -19,7 +19,7 @@
       Update boid position based on velocity
       Update velocity and heading angle based on other boids within influence distance
    "
-   (let [steering (steer/steer-boid boid boids)
+   (let [steering (steer/steer-boid boid boids [])
          new-velocity (:vel steering)]
         {:pos (move (:pos boid) new-velocity speed)
          :vel new-velocity
@@ -45,10 +45,22 @@
    ""
    (:boid-speed state))
 
+(defn update-targets [state]
+   "if there are boids on target remove target"
+   (let [boids (:boids state)
+         targets (:targets state)
+         dist (+ globals/target-boid-dist (/ globals/bird-seed-diam 2)) ]
+      (if (> (count targets) 0)
+         (filter
+            #(not (util/too-close-boids? boids {:pos %} dist))
+            targets)
+         [])))
+
 (defn update-state
    [state]
    "returns updated state"
    {:boids (update-boids state)
+    :targets (update-targets state)
     :boid-diam (:boid-diam state)
     :boid-speed (update-boid-speed state)
     :frame (inc (or (:frame state) 0))})

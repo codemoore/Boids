@@ -20,9 +20,9 @@
       (and (<= d dist) (not (identical? boid %)))))
 
 (defn too-close?
-   [boid1 boid2]
+   ([boid1 boid2]
    "2 single boids too close?"
-   ((too-close-fn boid1 globals/personal-space) boid2))
+   ((too-close-fn boid1 globals/personal-space) boid2)))
 
 (defn too-close-boids?
    ([boids boid dist]

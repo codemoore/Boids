@@ -18,7 +18,7 @@
 (def infl-angle (/ Math/PI 2))
 
 ;;"Max movement speed for a boid, in pixels/frame"
-(def boid-speed 1)
+(def boid-speed 2)
 
 ;;"Intial amount of boids spawned"
 (def n-boids 35)
@@ -48,7 +48,7 @@
 (def background-color [255 255 255])
 
 ;; frames per sec
-(def frame-rate 60)
+(def frame-rate 22)
 
 ;; mulitplier for seperation vector
 (def sep-weight 2.5)
@@ -61,3 +61,15 @@
 
 ;; multiplier for self vector
 (def self-weight 1.0)
+
+;; multiplier for seek vector
+(def seek-weight 4.0)
+
+;; how close in px can a boid get to a target before the target is removed
+(def target-boid-dist 10)
+
+;; diameter of bird-seed/targets
+(def bird-seed-diam 10)
+
+;; color of bird seed
+(def bird-seed-color [240 230 140])

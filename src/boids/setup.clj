@@ -10,8 +10,7 @@
          h (:height globals/screen-size)
          b (/ globals/boid-diam 2)]
            {:pos #_{:x (/ w 2) :y (/ h 2)} (util/generate-rand-position b (- w b) b (- h b))  ;; starting x, y pos
-            :vel (:vel boid)
-            :heading (:heading boid)}))
+            :vel (:vel boid)}))
 
 (defn create-boid
 
@@ -55,6 +54,7 @@
    "Set initial quil params and return intial state"
    (q/frame-rate globals/frame-rate)
    {:boids (generate-boids)
+    :targets []
     :boid-diam globals/boid-diam
     :boid-speed globals/boid-speed
     :frame 0})
