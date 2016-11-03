@@ -33,9 +33,10 @@
       use average velocities in [avg-boids]
       return average heading angle
    "
-   (let [avg-vel (get-avg-vel boids)
-         ali (util/normalize-velocity avg-vel)]
-      (apply-weight ali globals/ali-weight)))
+   (let [count (count boids)
+         vel (get-avg-vel boids)
+         ali (util/normalize-velocity vel)]
+      (apply-weight ali (* globals/ali-weight globals/boid-speed))))
 
 (defn cohesion
    [boid boids]
@@ -51,7 +52,7 @@
          y (:y (:pos boid))
          coh (util/normalize-velocity {:x (/ (- avg-x x) 100)
                                        :y (/ (- avg-y y) 100)})]
-         (apply-weight coh globals/coh-weight)))
+         (apply-weight coh (* globals/coh-weight globals/boid-speed))))
 
 
 
@@ -73,10 +74,10 @@
                      :y (reduce (reduce-sep-fn :y boid) 0 close-boids)}
                     {:x 0 :y 0})
          sep (util/normalize-velocity sep-vel)]
-      (apply-weight sep globals/sep-weight)))
+      (apply-weight sep (* globals/sep-weight globals/boid-speed))))
 
 (defn self-vel [boid boids]
-   (apply-weight (:vel boid) globals/self-weight))
+   (apply-weight (:vel boid) (* globals/self-weight globals/boid-speed)))
 
 
 (defn apply-rules [boid boids & rules]
@@ -106,5 +107,5 @@
                                 (:vel boid))
                combined (reduce combine velocities)]
             ;; combine velocities and limit
-            {:vel (util/normalize-velocity combined)})
+            {:vel (util/limit-velocity (combine combined (:vel boid)))})
          boid))) ;; else return boid

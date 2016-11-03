@@ -1,11 +1,11 @@
 # boids
 
-A Quil sketch for a boids flocking algorithm.
+A Clojure Quil sketch for a boids flocking algorithm.
 
-Some issues with boid seperation, most likely fixed by todo items.
+
 
 ## TODO
-    -Switch to use acceleration and variable speeds
+
 
 ## Usage
 

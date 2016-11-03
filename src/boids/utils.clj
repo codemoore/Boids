@@ -131,7 +131,7 @@
       else return the velocity unchanged
    "
    (let [magnitude (magnitude vel)
-         max (globals/boid-speed)]
+         max globals/boid-speed]
       (if (> magnitude max)
          (let [r (/ max magnitude)]
             {:x (* (:x vel) r)
